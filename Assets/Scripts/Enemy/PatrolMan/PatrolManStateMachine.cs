@@ -1,15 +1,16 @@
 using StatePattern.StateMachine;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace StatePattern.Enemy
 {
-    public class OnePunchManStateMachine : IStateMachine
+    public class PatrolManStateMachine : IStateMachine
     {
-        private OnePunchManController Owner;
+        private PatrolManController Owner;
         private IState currentState;
         protected Dictionary<EnemyStates, IState> States = new Dictionary<EnemyStates, IState>();
 
-        public OnePunchManStateMachine(OnePunchManController Owner)
+        public PatrolManStateMachine(PatrolManController Owner)
         {
             this.Owner = Owner;
             CreateStates();
@@ -19,7 +20,8 @@ namespace StatePattern.Enemy
         private void CreateStates()
         {
             States.Add(StateMachine.EnemyStates.IDLE, new IdleState(this));
-            States.Add(StateMachine.EnemyStates.ROTATING, new RotatingState(this));
+            States.Add(StateMachine.EnemyStates.PATROLLING, new PatrollingState(this));
+            States.Add(StateMachine.EnemyStates.CHASING, new ChasingState(this));
             States.Add(StateMachine.EnemyStates.SHOOTING, new ShootingState(this));
         }
 
