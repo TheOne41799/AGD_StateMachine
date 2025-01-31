@@ -3,7 +3,6 @@ using StatePattern.Player;
 using StatePattern.StateMachine;
 using System.Collections;
 using UnityEngine;
-using static UnityEditor.VersionControl.Asset;
 
 namespace StatePattern.Enemy
 {

@@ -1,6 +1,5 @@
 using StatePattern.StateMachine;
 using UnityEngine;
-using static UnityEditor.VersionControl.Asset;
 
 namespace StatePattern.Enemy
 {
