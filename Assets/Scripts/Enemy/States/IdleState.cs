@@ -1,15 +1,16 @@
 using StatePattern.StateMachine;
 using UnityEngine;
+using static UnityEditor.VersionControl.Asset;
 
 namespace StatePattern.Enemy
 {
-    public class IdleState : IState
+    public class IdleState<T> : IState where T : EnemyController
     {
         public EnemyController Owner { get; set; }
-        private IStateMachine stateMachine;
+        private GenericStateMachine<T> stateMachine;
         private float timer;
 
-        public IdleState(IStateMachine stateMachine) => this.stateMachine = stateMachine;
+        public IdleState(GenericStateMachine<T> stateMachine) => this.stateMachine = stateMachine;
 
         public void OnStateEnter() => ResetTimer();
 
@@ -18,10 +19,10 @@ namespace StatePattern.Enemy
             timer -= Time.deltaTime;
             if (timer <= 0)
             {
-                if (Owner.GetType() == typeof(OnePunchManController))
-                    stateMachine.ChangeState(States.ROTATING);
+                if (typeof(T) == typeof(OnePunchManController))
+                    stateMachine.ChangeState(EnemyStates.ROTATING);
                 else
-                    stateMachine.ChangeState(States.PATROLLING);
+                    stateMachine.ChangeState(EnemyStates.PATROLLING);
             }
         }
 
