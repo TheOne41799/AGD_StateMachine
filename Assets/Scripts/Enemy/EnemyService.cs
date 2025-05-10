@@ -31,11 +31,11 @@ namespace StatePattern.Enemy
         public void SpawnEnemies(int levelId)
         {
             List<EnemyScriptableObject> enemyDataForLevel = LevelService.GetEnemyDataForLevel(levelId);
-            
-            foreach(EnemyScriptableObject enemySO in enemyDataForLevel)
+
+            foreach (EnemyScriptableObject enemySO in enemyDataForLevel)
             {
                 EnemyController enemy = CreateEnemy(enemySO);
-                activeEnemies.Add(enemy);
+                AddEnemy(enemy);
             }
 
             SetEnemyCount();
@@ -57,6 +57,12 @@ namespace StatePattern.Enemy
                 case EnemyType.OnePunchMan:
                     enemy = new OnePunchManController(enemyScriptableObject);
                     break;
+                case EnemyType.PatrolMan:
+                    enemy = new PatrolManController(enemyScriptableObject);
+                    break;
+                case EnemyType.Hitman:
+                    enemy = new HitmanController(enemyScriptableObject);
+                    break;
                 default:
                     enemy = new EnemyController(enemyScriptableObject);
                     break;
@@ -65,12 +71,14 @@ namespace StatePattern.Enemy
             return enemy;
         }
 
+        public void AddEnemy(EnemyController enemy) => activeEnemies.Add(enemy);
+
         public void EnemyDied(EnemyController deadEnemy)
         {
             activeEnemies.Remove(deadEnemy);
             SoundService.PlaySoundEffects(Sound.SoundType.ENEMY_DEATH);
             UIService.UpdateEnemyCount(activeEnemies.Count, spawnedEnemies);
-            if (PlayerWon()) 
+            if (PlayerWon())
             {
                 SoundService.PlaySoundEffects(Sound.SoundType.GAME_WON);
                 UIService.GameWon();
@@ -79,7 +87,7 @@ namespace StatePattern.Enemy
 
         public void PlayerDied()
         {
-            foreach(EnemyController enemy in activeEnemies)
+            foreach (EnemyController enemy in activeEnemies)
             {
                 enemy.SetState(EnemyState.DEACTIVE);
             }
